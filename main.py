@@ -1,8 +1,13 @@
 import os
 from natsort import natsorted
 
+# path to the directory you want turned into a website
+root = r"D:\Documents"
+# path to the output folder
+output_folder = r"D:"
+# in order for the website to work, the output folder has to contain the directory you want visualised
+# copy the "assets" folder into the output folder
 def get_icon(entry):
-
     file = '<i class="bi bi-file-earmark"></i>\n'
 
     film = '<i class="bi bi-film"></i>\n'
@@ -46,19 +51,90 @@ def get_icon(entry):
     return extension_dict.get(entry.split('.')[-1], file)
 
 
-def builder(dir_name, output_dir):
-
-    contents = os.listdir(dir_name)
-    list_of_dirs = ''
-    list_of_files = ''
-    header = '<!DOCTYPE html> \n<html lang="en"> \n \n<head> \n  <meta charset="utf-8"> \n  <meta content="width=device-width, initial-scale=1.0" name="viewport"> \n \n  <title>Archive</title> \n  <meta content="" name="description"> \n  <meta content="" name="keywords"> \n \n  <!-- Favicons --> \n  <link sizes="480x480" type="image/png" href="/assets/img/favicon.png" rel="icon"> \n  <link sizes="480x480" type="image/png" href="/assets/img/favicon.png" rel="shortcut icon"> \n  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon"> \n \n  <!-- Google Fonts --> \n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> \n  <!-- Vendor CSS Files --> \n  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet"> \n  <link href="/assets/vendor/aos/aos.css" rel="stylesheet"> \n  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> \n  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"> \n  <link href="/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"> \n  <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet"> \n  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"> \n \n  <!-- Template Main CSS File --> \n  <link href="/assets/css/style.css" rel="stylesheet"> \n \n</head> \n \n<body> \n  <main id="main"> \n     \n    <section class="features mt-4"> \n        <div class="container" data-aos="fade-up"> \n   \n            <div class="row" data-aos="zoom-in" data-aos-delay="100">'
-    footer = '</div> \n   \n        </div> \n    </section> \n  </main><!-- End #main --> \n \n  <!-- ======= Footer ======= --> \n   \n   \n  <a href="/#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a> \n \n  <!-- Vendor JS Files --> \n  <script src="/assets/vendor/aos/aos.js"></script> \n  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> \n  <script src="/assets/vendor/php-email-form/validate.js"></script> \n  <script src="/assets/vendor/purecounter/purecounter.js"></script> \n  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script> \n \n  <!-- Template Main JS File --> \n  <script src="/assets/js/main.js"></script> \n \n</body> \n \n</html>'
+def get_features(items, dir_name):
     first = '<div class="col-lg-3 col-md-4"> \n                    <div class="icon-box"> \n                        '
     second = '<div class="col-lg-3 col-md-4 mt-4 mt-md-0"> \n                    <div class="icon-box"> \n                        '
     third = second
     fourth = ' <div class="col-lg-3 col-md-4 mt-4 mt-lg-0"> \n                    <div class="icon-box"> \n                        '
     following = '<div class="col-lg-3 col-md-4 mt-4"> \n                    <div class="icon-box"> \n                        '
     folder = '<i class="bi bi-folder"></i>'
+    features = ''
+    for i in range(len(items)):
+        link = os.path.join(dir_name, items[i]).replace(root.replace(root.split('\\')[-1], ''), '')
+        replace_folder = 'onclick=\"location.href=\'' + items[i] + '/' + items[i] + '.html' + '\'\" style="cursor: pointer;\" class=\"icon-box\"'
+        replace_file = 'onclick=\"location.href=\'\\' + link + '\'\" style="cursor: pointer;\" class=\"icon-box\"'
+        if i == 0:
+            features += first
+            if os.path.isdir(os.path.join(dir_name, items[i])):
+                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
+                features = features.replace('class="icon-box"', replace_folder)
+
+            else:
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+                features = features.replace('class="icon-box"', replace_file)
+
+        elif i == 1:
+            features += second
+            if os.path.isdir(os.path.join(dir_name, items[i])):
+                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
+                features = features.replace('class="icon-box"', replace_folder)
+
+            else:
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+                features = features.replace('class="icon-box"', replace_file)
+
+        elif i == 2:
+            features += third
+            if os.path.isdir(os.path.join(dir_name, items[i])):
+                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
+                features = features.replace('class="icon-box"', replace_folder)
+
+            else:
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+                features = features.replace('class="icon-box"', replace_file)
+
+        elif i == 3:
+            features += fourth
+            if os.path.isdir(os.path.join(dir_name, items[i])):
+                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
+                features = features.replace('class="icon-box"', replace_folder)
+
+            else:
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+                features = features.replace('class="icon-box"', replace_file)
+
+        else:
+            features += following
+            if os.path.isdir(os.path.join(dir_name, items[i])):
+                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
+                features = features.replace('class="icon-box"', replace_folder)
+
+            else:
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+                features = features.replace('class="icon-box"', replace_file)
+
+    return features
+
+
+def get_header(header, dir_name):
+    icon = '</a><i class="bi bi-caret-right-fill"></i><a href="'
+    header = header + '<p><a href="'
+    header = header + '../' * (dir_name.count('\\') - root.count('\\')) + dir_name.split('\\')[root.count('\\')] + '.html">' + dir_name.split('\\')[root.count('\\')]
+    print(dir_name)
+    for count in range(root.count('\\')+1, len(dir_name.split('\\'))):
+        i = dir_name.split('\\')[count]
+        header = header + icon + '../' * (dir_name.count('\\') - count) + i + '.html">' + i
+        print(count)
+    return header + '</a></p> \n            </div> \n        </div> \n    </section> \n    <section class="features mt-4"> \n        <div class="container" data-aos="fade-up"> \n   \n            <div class="row" data-aos="zoom-in" data-aos-delay="100"> \n   \n                '
+
+
+def builder(dir_name, output_dir):
+    contents = os.listdir(dir_name)
+    list_of_dirs = ''
+    list_of_files = ''
+    header = '<!DOCTYPE html> \n<html lang="en"> \n \n<head> \n  <meta charset="utf-8"> \n  <meta content="width=device-width, initial-scale=1.0" name="viewport"> \n \n  <title>Archive</title> \n  <meta content="" name="description"> \n  <meta content="" name="keywords"> \n \n  <!-- Favicons --> \n  <link sizes="480x480" type="image/png" href="/assets/img/favicon.png" rel="icon"> \n  <link sizes="480x480" type="image/png" href="/assets/img/favicon.png" rel="shortcut icon"> \n  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon"> \n \n  <!-- Google Fonts --> \n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> \n  <!-- Vendor CSS Files --> \n  <link href="/assets/vendor/animate.css/animate.min.css" rel="stylesheet"> \n  <link href="/assets/vendor/aos/aos.css" rel="stylesheet"> \n  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> \n  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet"> \n  <link href="/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet"> \n  <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet"> \n  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"> \n \n  <!-- Template Main CSS File --> \n  <link href="/assets/css/style.css" rel="stylesheet"> \n \n</head> \n \n<body> \n  <main id="main"> \n    <section> \n        <div class="container position-relative" data-aos="zoom-in" data-aos-delay="100"> \n            <div class="section-title"> \n                <h2> <a href="javascript:history.back()" class="btn-get-started"><i class="bi bi-arrow-left"></i>Назад</a></h2> \n                '
+    footer = '</div> \n   \n        </div> \n    </section> \n  </main><!-- End #main --> \n   \n   \n   \n  <!-- Vendor JS Files --> \n  <script src="/assets/vendor/aos/aos.js"></script> \n  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> \n  <script src="/assets/vendor/php-email-form/validate.js"></script> \n  <script src="/assets/vendor/purecounter/purecounter.js"></script> \n  <script src="/assets/vendor/swiper/swiper-bundle.min.js"></script> \n \n  <!-- Template Main JS File --> \n  <script src="/assets/js/main.js"></script> \n \n</body> \n \n</html>'
+
     dirs = []
     files = []
 
@@ -78,60 +154,20 @@ def builder(dir_name, output_dir):
             list_of_files += 'file\n'
     dirs = natsorted(dirs)
     files = natsorted(files)
-    
+    header = get_header(header, dir_name)
     items = dirs + files
-    features = ''
-    for i in range(len(items)):
-        if(i == 0):
-            features += first
-            if os.path.isdir(os.path.join(dir_name, items[i])):
-                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
-
-            else:
-                features += get_icon(items[i]) + ' \n                        <h3><a href=\"' + os.path.join(dir_name, items[i]) + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
-            features
-        elif(i == 1):
-            features += second
-            if os.path.isdir(os.path.join(dir_name, items[i])):
-                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
-
-            else:
-                features += get_icon(items[i]) + ' \n                        <h3><a href=\"' + os.path.join(dir_name, items[i]) + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
-        elif(i == 2):
-            features += third
-            if os.path.isdir(os.path.join(dir_name, items[i])):
-                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
-
-            else:
-                features += get_icon(items[i]) + ' \n                        <h3><a href=\"' + os.path.join(dir_name, items[i]) + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
-        elif(i == 3):
-            features += fourth
-            if os.path.isdir(os.path.join(dir_name, items[i])):
-                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
-
-            else:
-                features += get_icon(items[i]) + ' \n                        <h3><a href=\"' + os.path.join(dir_name, items[i]) + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
-        else:
-            features += following
-            if os.path.isdir(os.path.join(dir_name, items[i])):
-                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
-
-            else:
-                features += get_icon(items[i]) + ' \n                        <h3><a href=\"' + os.path.join(dir_name, items[i]) + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
-
+    features = get_features(items, dir_name)
     html_name = os.path.join(output_dir, os.path.basename(dir_name) + '.html')
     file1 = open(html_name, 'w', encoding='utf-8')
-    
+
     to_file = header + features + footer
     file1.write(to_file)
     file1.close()
 
 
 def main():
-    dir_name = r"C:\Users\Marik\Dropbox\Site"
-    output_dir = r'D:\Documents\Programming\output'
-    builder(dir_name, output_dir)
-   
+    builder(root, output_folder)
+
 
 if __name__ == '__main__':
     main()
