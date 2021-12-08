@@ -1,10 +1,8 @@
 import os
-
-'''
-    For the given path, get the List of all files in the directory tree 
-'''
+from natsort import natsorted
 
 def get_icon(entry):
+
     file = '<i class="bi bi-file-earmark"></i>\n'
 
     film = '<i class="bi bi-film"></i>\n'
@@ -22,7 +20,7 @@ def get_icon(entry):
 
     film_extension = ['3g2', '3gp', 'avi', 'flv', 'h256', 'm4v', 'mkv', 'mov', 'mp4', 'mpg', 'mpeg', 'rm', 'swfw', 'vob', 'wmv']
     music_extension = ['mp3', 'wav', 'aif', 'wproj', 'ec3', 'weba', 'flp', 'abc', 'ckb', 'sdt', 'cgrp', 'nbs', 'flac', 'l', 'mui', 'ogg', 'cda', 'mid', 'midi', 'wma', 'mpa', 'wpl']
-    pdf_extension = 'pdf'
+    pdf_extension = ['pdf']
     txt_extension = ['txt', 'tex']
     word_extension = ['doc', 'docx', 'odt', 'wpd']
     image_extension = ['ai', 'bmp', 'gif', 'ico', 'jpeg', 'jpg', 'png', 'ps', 'psd', 'svg', 'tif', 'tiff']
@@ -46,8 +44,10 @@ def get_icon(entry):
     extension_dict.update(dict.fromkeys(book_extension, book))
     extension_dict.update(dict.fromkeys(executable_extension, executable))
     return extension_dict.get(entry.split('.')[-1], file)
-    
+
+
 def builder(dir_name, output_dir):
+
     contents = os.listdir(dir_name)
     list_of_dirs = ''
     list_of_files = ''
@@ -58,35 +58,80 @@ def builder(dir_name, output_dir):
     third = second
     fourth = ' <div class="col-lg-3 col-md-4 mt-4 mt-lg-0"> \n                    <div class="icon-box"> \n                        '
     following = '<div class="col-lg-3 col-md-4 mt-4"> \n                    <div class="icon-box"> \n                        '
+    folder = '<i class="bi bi-folder"></i>'
+    dirs = []
+    files = []
 
     for entry in contents:
         # Create full path
         full_path = os.path.join(dir_name, entry)
         # If entry is a directory then get the list of files in this directory
         if os.path.isdir(full_path):
+            dirs.append(entry)
             list_of_dirs += entry
-            list_of_dirs += 'brahma \n putra \n'
+            list_of_dirs += 'that is a folder \n'
             os.mkdir(os.path.join(output_dir, entry))
             builder(full_path, os.path.join(output_dir, entry))
         else:
+            files.append(entry)
             list_of_files += entry
-            list_of_files += 'files\n filesfjfj \n'
+            list_of_files += 'file\n'
+    dirs = natsorted(dirs)
+    files = natsorted(files)
+    
+    items = dirs + files
+    features = ''
+    for i in range(len(items)):
+        if(i == 0):
+            features += first
+            if os.path.isdir(os.path.join(dir_name, items[i])):
+                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
+
+            else:
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"' + os.path.join(dir_name, items[i]) + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+            features
+        elif(i == 1):
+            features += second
+            if os.path.isdir(os.path.join(dir_name, items[i])):
+                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
+
+            else:
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"' + os.path.join(dir_name, items[i]) + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+        elif(i == 2):
+            features += third
+            if os.path.isdir(os.path.join(dir_name, items[i])):
+                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
+
+            else:
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"' + os.path.join(dir_name, items[i]) + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+        elif(i == 3):
+            features += fourth
+            if os.path.isdir(os.path.join(dir_name, items[i])):
+                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
+
+            else:
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"' + os.path.join(dir_name, items[i]) + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+        else:
+            features += following
+            if os.path.isdir(os.path.join(dir_name, items[i])):
+                features = features + folder + ' \n                        <h3><a href=\"' + items[i] + '/' + items[i] + '.html\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n   \n                '
+
+            else:
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"' + os.path.join(dir_name, items[i]) + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
 
     html_name = os.path.join(output_dir, os.path.basename(dir_name) + '.html')
     file1 = open(html_name, 'w', encoding='utf-8')
-    to_file = ''
-    to_file = header + list_of_dirs + list_of_files + footer
-    print(to_file)
+    
+    to_file = header + features + footer
     file1.write(to_file)
     file1.close()
 
 
 def main():
-    dir_name = r'C:\Users\Marik\Dropbox\Site'
+    dir_name = r"C:\Users\Marik\Dropbox\Site"
     output_dir = r'D:\Documents\Programming\output'
-    # builder(dir_name, output_dir)
-    entry = 'ogi.doc'
-    print(get_icon(entry))
+    builder(dir_name, output_dir)
+   
 
 if __name__ == '__main__':
     main()
