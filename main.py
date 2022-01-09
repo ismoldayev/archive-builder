@@ -4,7 +4,7 @@ from natsort import natsorted
 # path to the directory you want turned into a website
 root = r"D:\Documents\Архив"
 # path to the output folder
-output_folder = r"D:\Documents\Projects"
+output_folder = r"D:\Documents\Programming\output"
 # in order for the website to work, the output folder has to contain the directory you want visualised
 # copy the "assets" folder into the output folder
 def get_icon(entry):
