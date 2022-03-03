@@ -50,6 +50,29 @@ def get_icon(entry):
     extension_dict.update(dict.fromkeys(executable_extension, executable))
     return extension_dict.get(entry.split('.')[-1], file)
 
+def get_title(name):
+    name = name.rsplit('.', 1)[0]
+    endings = ['_7problems', '_7solutions', '_8problems', '_8solutions', '_9problems', '_9solutions', '_10problems', '_10solutions', '_11problems', '_11solutions', '_12problems', '_12solutions', '_7-8problems', '_7-8solutions', '_9-10problems', '_9-10solutions', '_10-12problems', '_10-12solutions', '_11-12problems', '_11-12solutions', '_STproblems', '_STsolutions']
+    for ending in endings:
+        if(name.endswith(ending)):
+            name = name.rsplit('_', 1)[1]
+            if(name.endswith('solutions')):
+                name = name.rsplit('solutions', 1)[0]
+                if(name.endswith('ST')):
+                    name = 'Специална тема'
+                else:
+                    name = name + ' клас'
+                name = name + ' решения'
+            else:
+                name = name.rsplit('problems', 1)[0]
+                if(name.endswith('ST')):
+                    name = 'Специална тема'
+                else:
+                    name = name + ' клас'
+                name = name + ' задачи'
+            print('Formated name ' + name)
+    
+    return name 
 
 def get_features(items, dir_name):
     first = '<div class="col-lg-3 col-md-4"> \n                    <div class="icon-box"> \n                        '
@@ -61,6 +84,7 @@ def get_features(items, dir_name):
     features = ''
     for i in range(len(items)):
         link = os.path.join(dir_name, items[i]).replace(root.replace(root.split('\\')[-1], ''), '')
+        title = get_title(items[i])
         if i == 0:
             if os.path.isdir(os.path.join(dir_name, items[i])):
                 features += first
@@ -68,7 +92,7 @@ def get_features(items, dir_name):
 
             else:
                 features += first
-                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + title + '</a></h3> \n                    </div> \n                </div> \n  '
 
         elif i == 1:
             if os.path.isdir(os.path.join(dir_name, items[i])):
@@ -77,7 +101,7 @@ def get_features(items, dir_name):
 
             else:
                 features += second
-                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + title + '</a></h3> \n                    </div> \n                </div> \n  '
 
         elif i == 2:
             if os.path.isdir(os.path.join(dir_name, items[i])):
@@ -86,7 +110,7 @@ def get_features(items, dir_name):
 
             else:
                 features += third
-                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + title + '</a></h3> \n                    </div> \n                </div> \n  '
 
         elif i == 3:
             if os.path.isdir(os.path.join(dir_name, items[i])):
@@ -95,7 +119,7 @@ def get_features(items, dir_name):
 
             else:
                 features += fourth
-                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + title + '</a></h3> \n                    </div> \n                </div> \n  '
 
         else:
             if os.path.isdir(os.path.join(dir_name, items[i])):
@@ -104,7 +128,7 @@ def get_features(items, dir_name):
 
             else:
                 features += following
-                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + items[i] + '</a></h3> \n                    </div> \n                </div> \n  '
+                features += get_icon(items[i]) + ' \n                        <h3><a href=\"\\' + link + '\">' + title + '</a></h3> \n                    </div> \n                </div> \n  '
 
 
     return features
